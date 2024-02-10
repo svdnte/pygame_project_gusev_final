@@ -37,8 +37,8 @@ class Tank(pygame.sprite.Sprite):
         self.explosion_sprites = explosion_sprites
 
         # self.shoot_sound = pygame.mixer.Sound(r'../data/sounds/effects/shoot.wav')
-        self.shoot_sound = pygame.mixer.Sound(r'C:\Users\gunna\PycharmProjects\pygame_project_gusev_final\data\sounds\effects\jg-032316-sfx-8-bit-punch.mp3')
-        self.explosion_sound = pygame.mixer.Sound(r"C:\Users\gunna\Downloads\jg-032316-sfx-8-bit-hit-6.mp3")
+        self.shoot_sound = pygame.mixer.Sound(r'../data/sounds/effects/shoot.mp3')
+        self.explosion_sound = pygame.mixer.Sound(r"../data/sounds/effects/hit.mp3")
         self.explosion_sound.set_volume(0.34)
 
     def update(self, key_list):
