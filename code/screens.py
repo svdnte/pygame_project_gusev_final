@@ -35,7 +35,7 @@ def start_screen():
         intro_text_cords[line] = st_rect
 
     font = pygame.font.Font(None,int(65 * SCALE))
-    st_rendered = font.render('НАЗВАНИЕ ИГРЫ', 1, pygame.Color('black'))
+    st_rendered = font.render(GAME_NAME, 1, pygame.Color('black'))
     st_rect = st_rendered.get_rect()
     st_rect.x = 600 * SCALE
     st_rect.y = 80 * SCALE

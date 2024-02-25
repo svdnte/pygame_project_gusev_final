@@ -63,5 +63,4 @@ print(VELOCITY)
 
 directions = ['N', 'S', 'W', 'E']
 
-
-
+GAME_NAME = "ТАНЧИКИ"
