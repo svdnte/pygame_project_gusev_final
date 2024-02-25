@@ -58,9 +58,10 @@ class Bullet(pygame.sprite.Sprite):
     def check_collide(self):
         for sprite in self.obstacle_sprites:
             if pygame.sprite.collide_mask(self, sprite):
+                sprite.hit()
                 self.kill()
 
-        if not 0 < self.rect.x < 800 + self.w or not 0 < self.rect.y < 800 + self.h:
+        if not 0 < self.rect.x < HEIGHT + self.w or not 0 < self.rect.y < HEIGHT + self.h:
             self.kill()
 
         for sprite in self.tank_sprites:

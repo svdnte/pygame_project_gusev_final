@@ -18,7 +18,7 @@ class Tank(pygame.sprite.Sprite):
 
         self.reloaded = False
 
-        self.V = TILE_SIZE / 50
+        self.V = 1
         self.direction = 'N'
 
         self.shot_time = -2000
@@ -56,7 +56,7 @@ class Tank(pygame.sprite.Sprite):
             self.rect.y += self.V
             self.direction = 'S'
             self.direction_changed()
-            if self.rect.y + self.rect.h > 800:
+            if self.rect.y + self.rect.h > 800 * SCALE:
                 self.rect.y -= self.V * 2
 
         if key_list[pygame.K_a] or key_list[pygame.K_LEFT]:
@@ -70,7 +70,7 @@ class Tank(pygame.sprite.Sprite):
             self.rect.x += self.V
             self.direction = 'E'
             self.direction_changed()
-            if self.rect.x + self.rect.w > 800:
+            if self.rect.x + self.rect.w > 800 * SCALE:
                 self.rect.x -= self.V * 2
 
         # Создаем пулю
@@ -97,7 +97,7 @@ class Tank(pygame.sprite.Sprite):
             direction = self.check_collide_direction(coll)
             while direction:
                 conv = self.convert(direction)
-                move = -conv[0], -conv[1]
+                move = -conv[0] * 2, -conv[1] * 2
                 self.make_move(*move)
 
                 direction = self.check_collide_direction(coll)
@@ -143,13 +143,13 @@ class Tank(pygame.sprite.Sprite):
     def check_collide_direction(self, obj):
         r = obj.rect
         s = self.rect
-        if r.collidepoint(s.x, s.y + TILE_SIZE / 8) or r.collidepoint(s.x, s.y + s.h - TILE_SIZE / 8):
+        if r.collidepoint(s.x, s.y + TILE_SIZE / 8 * SCALE) or r.collidepoint(s.x, s.y + s.h - TILE_SIZE / 8 * SCALE):
             return 'W'
-        if r.collidepoint(s.x + s.w, s.y + TILE_SIZE / 8) or r.collidepoint(s.x + s.w, s.y + s.h - TILE_SIZE / 8):
+        if r.collidepoint(s.x + s.w, s.y + TILE_SIZE / 8 * SCALE) or r.collidepoint(s.x + s.w, s.y + s.h - TILE_SIZE / 8 * SCALE):
             return 'E'
-        if r.collidepoint(s.x + 2, s.y) or r.collidepoint(s.x + s.w - 2, s.y):
+        if r.collidepoint(s.x + 2 * SCALE, s.y) or r.collidepoint(s.x + s.w - 2 * SCALE, s.y):
             return 'N'
-        if r.collidepoint(s.x + 2, s.y + s.h) or r.collidepoint(s.x + s.w - 2, s.y + s.h):
+        if r.collidepoint(s.x + 2 * SCALE, s.y + s.h) or r.collidepoint(s.x + s.w - 2 * SCALE, s.y + s.h):
             return 'S'
 
     def make_move(self, x, y):
@@ -208,15 +208,16 @@ class Enemy(Tank):
             self.shoot()
 
     def move(self, x, y):
-        self.rect = self.rect.move(self.V * x, self.V * y)
+        self.make_move(x, y)
+        # self.rect = self.rect.move(self.V * x, self.V * y)
 
         ej = self.ejection()
         if ej:
             self.change_direction()
 
-        if not 0 < self.rect.x < 800 - self.rect.w or not 0 < self.rect.y < 800 - self.rect.h:
+        if not (0 < self.rect.x < WIDTH2 - self.rect.w) or not (0 < self.rect.y < HEIGHT2 - self.rect.h):
             move = self.convert(self.direction)
-            self.make_move(-move[0] * self.V, -move[1] * self.V)
+            self.make_move(-move[0] * 2, -move[1] * 2)
             self.change_direction()
 
     def change_direction(self):
@@ -232,7 +233,7 @@ class Enemy(Tank):
             step = int(-TILE_SIZE * 0.8 + 2)
         elif self.direction == 'S':
             start = self.rect.y + self.rect.h
-            finish = 800
+            finish = 800 * SCALE
             step = int(TILE_SIZE * 0.8 - 2)
         elif self.direction == 'W':
             start = self.rect.x
@@ -240,11 +241,11 @@ class Enemy(Tank):
             step = int(-TILE_SIZE * 0.8 + 2)
         else:
             start = self.rect.x + self.rect.w
-            finish = 800
+            finish = 800 * SCALE
             step = int(TILE_SIZE * 0.8 + 2)
 
         if self.direction in ('N', 'S'):
-            for i in range(start, finish, step):
+            for i in range(int(start), int(finish), int(step)):
                 for obst_sprite in self.obstacle_sprites:
                     if obst_sprite.rect.collidepoint(self.rect.x + self.rect.h // 2, i):
                         break
@@ -253,7 +254,7 @@ class Enemy(Tank):
                         self.shoot()
 
         else:
-            for i in range(start, finish, step):
+            for i in range(int(start), int(finish), int(step)):
                 for obst_sprite in self.obstacle_sprites:
                     if obst_sprite.rect.collidepoint(i, self.rect.y + self.rect.h // 2):
                         break

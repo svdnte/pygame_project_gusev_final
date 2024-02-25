@@ -25,7 +25,7 @@ def terminate():
 
 
 def write_text(screen, x, y, text, step, size, color, x_centered=False):
-    font = pygame.font.Font(None, size)
+    font = pygame.font.Font(None, int(size))
 
     rect_and_line = []
 

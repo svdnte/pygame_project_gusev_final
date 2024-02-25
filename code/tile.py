@@ -16,9 +16,11 @@ class Tile(pygame.sprite.Sprite):
         if tile_type == 'empty':
             self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         else:
-            path = tile_images_paths[tile_type]
-            if isinstance(path, tuple):
-                path = random.choice(path)
+            self.path = tile_images_paths[tile_type]
+            if isinstance(self.path, tuple):
+                path = self.path[0]
+            else:
+                path = self.path
 
             self.image = load_image(path, color_key=-1 if tile_type == 'wall' else None)
             self.image = pygame.transform.scale(self.image, (TILE_SIZE, TILE_SIZE))
@@ -26,5 +28,18 @@ class Tile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(TILE_SIZE * x, TILE_SIZE * y)
 
         self.mask = pygame.mask.from_surface(self.image)
+
+        self.hit_counter = 0
+
+    def hit(self):
+        self.hit_counter += 1
+
+        if self.hit_counter == 2:
+            self.kill()
+        else:
+            self.image = load_image(self.path[self.hit_counter], color_key=-1)
+            self.image = pygame.transform.scale(self.image, (TILE_SIZE, TILE_SIZE))
+
+
 
 
