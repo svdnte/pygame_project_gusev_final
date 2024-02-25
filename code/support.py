@@ -10,7 +10,20 @@ from time import sleep
 
 version = 0.2
 
-SCALE = 1
+
+def get_data():
+    global SCALE
+    try:
+        with open(r'../data/scale.txt', 'r', encoding='utf8') as file:
+            data = file.readline()
+            SCALE = float(data)
+    except io.UnsupportedOperation:
+        print('Не удалось открыть текстовый файл с данными, возможно, он пуст')
+        SCALE = 1
+
+get_data()
+
+SCALE = SCALE
 
 FPS = 60
 SIZE = WIDTH, HEIGHT = 1200 * SCALE, 800 * SCALE
@@ -45,19 +58,10 @@ explosion_image = r'../data/images/explosion.png'
 
 TILE_SIZE = int(50 * SCALE)
 VELOCITY = TILE_SIZE / FPS * SCALE
+print(VELOCITY)
 
 
 directions = ['N', 'S', 'W', 'E']
 
 
-def get_data():
-    try:
-        with open(r'../data/data.txt', 'w', encoding='utf8') as file:
-            data = file.readlines()
-            for line in data:
-                exec(line)
-    except io.UnsupportedOperation:
-        print('Не удалось открыть текстовый файл с данными, возможно, он пуст')
 
-
-get_data()
